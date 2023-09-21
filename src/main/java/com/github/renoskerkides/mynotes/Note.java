@@ -3,10 +3,12 @@ package com.github.renoskerkides.mynotes;
 public class Note {
     private String heading;
     private String content;
+    private int id;
 
-    public Note(String heading, String content) {
+    public Note(String heading, String content, int id) {
         this.heading = heading;
         this.content = content;
+        this.id = id;
     }
 
     public Note() {
@@ -25,6 +27,15 @@ public class Note {
     public String getContent() {
         return content;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
     public void setContent(String content) {
         this.content = content;
