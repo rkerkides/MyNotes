@@ -36,3 +36,20 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Compiled byte code
+*.class
+
+# Directory created by the IDE for compiled classes
+out/
+target/
+
+# Log files
+*.log
+
+# Other ignored files
+*.bak
+*.swp
+*.swo
+.idea/
+*.iml
