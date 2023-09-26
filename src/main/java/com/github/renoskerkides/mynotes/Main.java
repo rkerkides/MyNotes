@@ -20,9 +20,10 @@ public class Main {
             System.out.println("\nPlease choose an operation.");
             System.out.println("1. Write a new note");
             System.out.println("2. Read existing notes");
-            System.out.println("3. Delete an existing note");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice (1/2/3/4): ");
+            System.out.println("3. Update an existing note");
+            System.out.println("4. Delete an existing note");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice (1/2/3/4/5): ");
 
             int choice;
             try {
@@ -30,7 +31,7 @@ public class Main {
                 choice = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
                 // Handling invalid input
-                System.out.println("Invalid input. Please select 1, 2, 3, or 4.");
+                System.out.println("Invalid input. Please select 1, 2, 3, 4, or 5.");
                 continue;
             }
 
@@ -45,17 +46,21 @@ public class Main {
                     notes.readNotes(scanner);
                     break;
                 case 3:
+                    // Update existing note
+                    notes.updateNotes(scanner);
+                    break;
+                case 4:
                     // Delete existing note
                     notes.deleteNotes(scanner);
                     break;
-                case 4:
+                case 5:
                     // Exiting the program
                     System.out.println("Goodbye!");
                     scanner.close();
                     System.exit(0);
                 default:
                     // Handling invalid choice
-                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
+                    System.out.println("Invalid choice. Please select 1, 2, 3, 4, or 5.");
             }
         }
     }

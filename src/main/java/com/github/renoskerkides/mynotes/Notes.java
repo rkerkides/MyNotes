@@ -68,7 +68,7 @@ public class Notes {
             System.out.println("\nNo notes to delete!");
             return;
         }
-        // Displaying the number of notes and asking the user to select a note to read
+        // Displaying the number of notes and asking the user to select a note to delete
         System.out.printf("\nYou currently have %d notes stored. " +
                 "Please select the note you would like to delete.%n", notes.size());
 
@@ -76,6 +76,22 @@ public class Notes {
         listNotes();
         String noteToDelete = scanner.nextLine();
         deleteNote(noteToDelete);
+    }
+
+    public void updateNotes(Scanner scanner) {
+        // Checking if there are no notes to update
+        if (notes.isEmpty()) {
+            System.out.println("\nNo notes to update!");
+            return;
+        }
+        // Displaying the number of notes and asking the user to select a note to update
+        System.out.printf("\nYou currently have %d notes stored. " +
+                "Please select the note you would like to update.%n", notes.size());
+
+        // Listing the notes
+        listNotes();
+        String noteToUpdate = scanner.nextLine();
+        updateNote(noteToUpdate, scanner);
     }
 
     // A method to list notes
@@ -119,7 +135,7 @@ public class Notes {
         // Displaying the note if found by header
         if (optional.isPresent()) {
             Note note = optional.get();
-            System.out.printf("\n(%d) %s: %s", note.getId(), note.getHeading(), note.getContent());
+            System.out.printf("\n(%d) %s: %s%n", note.getId(), note.getHeading(), note.getContent());
         } else {
             System.out.printf("\nError, note '%s' not found!%n", noteToRead);
         }
@@ -134,10 +150,42 @@ public class Notes {
             Note note = optional.get();
             notes.remove(note);
             updateIDs();
+            NotesFileUtil.writeNotes(notes);
+            System.out.println("\nDeleted successfully!");
         } else {
             System.out.printf("\nError, note '%s' not found!%n", noteToDelete);
         }
     }
+
+    public void updateNote(String noteToUpdate, Scanner scanner) {
+        // Use the findNote method to return an optional of the requested Note
+        Optional<Note> optional = findNote(noteToUpdate);
+
+        // Update the note
+        if (optional.isPresent()) {
+            Note note = optional.get();
+            System.out.printf("\nCurrent heading: %s%n", note.getHeading());
+            System.out.println("\nSet new heading (press enter to keep the current heading): ");
+            String heading = scanner.nextLine();
+            // If the user entered a new heading, update the heading
+            if (!heading.trim().isEmpty()) {
+                note.setHeading(heading);
+            }
+
+            System.out.printf("\nCurrent content: %s%n", note.getContent());
+            System.out.println("\nSet new content (press enter to keep the current content): ");
+            String content = scanner.nextLine();
+            // If the user entered new content, update the content
+            if (!content.trim().isEmpty()) {
+                note.setContent(content);
+            }
+            NotesFileUtil.writeNotes(notes);
+            System.out.println("\nUpdated successfully!");
+        } else {
+            System.out.printf("\nError, note '%s' not found!%n", noteToUpdate);
+        }
+    }
+
 
     // Update IDs to ensure that they are continuous following note deletion
     public void updateIDs() {
