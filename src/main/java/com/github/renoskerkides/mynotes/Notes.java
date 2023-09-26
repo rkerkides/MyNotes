@@ -133,9 +133,18 @@ public class Notes {
         if (optional.isPresent()) {
             Note note = optional.get();
             notes.remove(note);
+            updateIDs();
         } else {
             System.out.printf("\nError, note '%s' not found!%n", noteToDelete);
         }
     }
 
+    // Update IDs to ensure that they are continuous following note deletion
+    public void updateIDs() {
+        for (int i = 0; i < notes.size(); i++) {
+            notes.get(i).setId(i + 1); // Set ID starting from 1
+        }
+        // Update the currentMaxId to reflect the last ID in the list
+        currentMaxId = notes.size();
+    }
 }

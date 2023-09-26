@@ -21,8 +21,8 @@ public class Main {
             System.out.println("1. Write a new note");
             System.out.println("2. Read existing notes");
             System.out.println("3. Delete an existing note");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice (1/2/3): ");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice (1/2/3/4): ");
 
             int choice;
             try {
@@ -55,7 +55,7 @@ public class Main {
                     System.exit(0);
                 default:
                     // Handling invalid choice
-                    System.out.println("Invalid choice. Please select 1, 2, or 4.");
+                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
             }
         }
     }
