@@ -62,6 +62,22 @@ public class Notes {
         displayNote(noteToRead);
     }
 
+    public void deleteNotes(Scanner scanner) {
+        // Checking if there are no notes to delete
+        if (notes.isEmpty()) {
+            System.out.println("\nNo notes to delete!");
+            return;
+        }
+        // Displaying the number of notes and asking the user to select a note to read
+        System.out.printf("\nYou currently have %d notes stored. " +
+                "Please select the note you would like to delete.%n", notes.size());
+
+        // Listing the notes
+        listNotes();
+        String noteToDelete = scanner.nextLine();
+        deleteNote(noteToDelete);
+    }
+
     // A method to list notes
     public void listNotes() {
         // Using IntStream to process notes in chunks
@@ -79,35 +95,47 @@ public class Notes {
                 });
     }
 
-    // A method to display a note
-    public void displayNote(String noteToRead) {
+    public Optional<Note> findNote(String noteToFind) {
         // Handling both ID and header as input for reading a note
         try {
-            int noteID = Integer.parseInt(noteToRead);
+            int noteID = Integer.parseInt(noteToFind);
             Optional<Note> optional = notes.stream()
                     .filter(n -> n.getId() == noteID)
                     .findFirst();
-
-            // Displaying the note if found
-            if (optional.isPresent()) {
-                Note note = optional.get();
-                System.out.printf("\n(%d) %s: %s", note.getId(), note.getHeading(), note.getContent());
-                System.out.println();
-            } else {
-                System.out.printf("\nError, note '%s' not found!%n", noteToRead);
-            }
+            return optional;
         } catch (NumberFormatException e) {
             Optional<Note> optional = notes.stream()
-                    .filter(n -> n.getHeading().equals(noteToRead))
+                    .filter(n -> n.getHeading().equals(noteToFind))
                     .findFirst();
-
-            // Displaying the note if found by header
-            if (optional.isPresent()) {
-                Note note = optional.get();
-                System.out.printf("\n(%d) %s: %s", note.getId(), note.getHeading(), note.getContent());
-            } else {
-                System.out.printf("\nError, note '%s' not found!%n", noteToRead);
-            }
+            return optional;
         }
     }
+
+    // A method to display a note
+    public void displayNote(String noteToRead) {
+        // Use the findNote method to return an optional of the requested Note
+        Optional<Note> optional = findNote(noteToRead);
+
+        // Displaying the note if found by header
+        if (optional.isPresent()) {
+            Note note = optional.get();
+            System.out.printf("\n(%d) %s: %s", note.getId(), note.getHeading(), note.getContent());
+        } else {
+            System.out.printf("\nError, note '%s' not found!%n", noteToRead);
+        }
+    }
+
+    public void deleteNote(String noteToDelete) {
+        // Use the findNote method to return an optional of the requested Note
+        Optional<Note> optional = findNote(noteToDelete);
+
+        // Delete the note from the notes list
+        if (optional.isPresent()) {
+            Note note = optional.get();
+            notes.remove(note);
+        } else {
+            System.out.printf("\nError, note '%s' not found!%n", noteToDelete);
+        }
+    }
+
 }
