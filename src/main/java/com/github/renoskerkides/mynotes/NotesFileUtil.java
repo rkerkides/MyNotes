@@ -11,36 +11,26 @@ public class NotesFileUtil {
 
     private static final String FILENAME = "notes.json";
 
-    /**
-     * Reads notes from a JSON file and returns them as a list of Note objects.
-     *
-     * @return List of notes. Returns an empty list if there are no notes or if there's an error.
-     */
+    // Method to read notes from a JSON file
     public static ArrayList<Note> readNotes() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // Read notes from the specified file and map them to a list of Note objects.
+            // Reading notes from file and mapping them to a list of Note objects
             File file = new File(FILENAME);
             return mapper.readValue(file, mapper.getTypeFactory().constructCollectionType(ArrayList.class, Note.class));
-
         } catch (IOException e) {
-            // In case of any issues, return an empty list.
+            // Returning an empty list in case of error
             return new ArrayList<>();
         }
     }
 
-    /**
-     * Writes a list of notes to a JSON file.
-     *
-     * @param notes List of notes to be written.
-     */
+    // Method to write notes to a JSON file
     public static void writeNotes(ArrayList<Note> notes) {
         ObjectMapper mapper = new ObjectMapper();
-
-        // If notes exist, ensure unique ID assignment by incrementing the highest existing ID.
         if (!notes.isEmpty()) {
             AtomicInteger maxId = new AtomicInteger(notes.stream().max(Comparator.comparingInt(Note::getId)).get().getId());
             notes.forEach(note -> {
+                // Ensuring unique ID assignment by incrementing the highest existing ID
                 if (note.getId() == 0) {
                     maxId.getAndIncrement();
                     note.setId(maxId.get());
@@ -49,11 +39,10 @@ public class NotesFileUtil {
         }
 
         try {
-            // Write the notes to the specified file.
+            // Writing notes to file
             mapper.writeValue(new File(FILENAME), notes);
-            System.out.println("\nNote added successfully!");
         } catch (IOException e) {
-            System.out.println("\nError writing to file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
